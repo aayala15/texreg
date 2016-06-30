@@ -232,7 +232,7 @@ texreg <- function(l, file = NULL, single.row = FALSE,
     center = TRUE, caption = "Statistical models", caption.above = FALSE, 
     label = "table:coefficients", booktabs = FALSE, dcolumn = FALSE, 
     sideways = FALSE, longtable = FALSE, use.packages = TRUE, table = TRUE, 
-    no.margin = FALSE, fontsize = NULL, scalebox = NULL, float.pos = "", ...) {
+    no.margin = FALSE, fontsize = NULL, scalebox = NULL, float.pos = "", full.width = FALSE, ...) {
   
   stars <- check.stars(stars)
   
@@ -370,7 +370,11 @@ texreg <- function(l, file = NULL, single.row = FALSE,
     if (coltypes[i] %in% c("coef", "customcol")) {
       alignmentletter <- "c"
     } else if (coltypes[i] == "coefnames") {
-      alignmentletter <- "l"
+      if (full.width == TRUE) {
+        alignmentletter <- "X"
+      } else {
+        alignmentletter <- "l"
+      }
     }
     if (dcolumn == FALSE) {
       coldef <- paste0(coldef, alignmentletter, margin.arg, " ")
@@ -454,7 +458,7 @@ texreg <- function(l, file = NULL, single.row = FALSE,
         string <- paste0(string, "\\scalebox{", scalebox, "}{\n")
       }
     }
-    string <- paste0(string, "\\begin{tabular}{", coldef, "}\n")
+    string <- paste0(string, "\\begin{tabu}{", coldef, "}\n")
   }
   
   # horizontal rule above the table
@@ -642,7 +646,7 @@ texreg <- function(l, file = NULL, single.row = FALSE,
   # write table footer
   if (longtable == FALSE) {
     string <- paste0(string, bottomline)
-    string <- paste0(string, note, "\\end{tabular}\n")
+    string <- paste0(string, note, "\\end{tabu}\n")
   }
   
   # take care of center, scalebox and table environment
